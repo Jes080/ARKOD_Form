@@ -1,0 +1,60 @@
+/* --- Global Theme & Background --- */
+.bg-gradient-theme {
+    background: linear-gradient(90deg, #a5f3fc 0%, #fef3c7 50%, #fee2e2 100%);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+/* --- Reusable Document Tables --- */
+.table-custom table { 
+    border-collapse: separate; 
+    border-spacing: 0 0rem; 
+    width: 100%;
+}
+
+.table-custom thead th { 
+    border: none; 
+    padding: 14px; 
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: #66626c;
+    text-align: left;
+}
+
+.table-custom tbody td { 
+    background-color: white; 
+    font-size: 14px;
+    border: none; 
+    padding: 1.25rem; 
+    vertical-align: middle;
+    border-top: 1px solid #f3f4f6;
+}
+
+.table-custom tbody tr:nth-child(even) td { background-color: #ffffff; }
+.table-custom tbody tr:nth-child(odd) td { background-color: #f9fafb; }
+
+.entry-title { color: #241f2d; font-weight: 500; text-decoration: none; font-size: 14px; }
+
+.btn-add { background-color: #7b6eff !important; color:white!important; border-radius: 4px; font-weight: 500; padding: 8px; }
+.action-link { font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; color: #818cf8; }
+.action-link i { margin-right: 5px; font-size: 1rem; }
+
+.app-form-container,
+.app-form-container label,
+.app-form-container input,
+.app-form-container select,
+.app-form-container textarea,
+.app-form-container .form-control,
+.app-form-container .form-select,
+.app-form-container .input-group-text,
+.app-form-container .form-control-sm,
+.app-form-container table,
+.app-form-container button {
+    font-size: 14px !important;
+}
+
+.app-form-container th {
+    font-size: 14px;
+    font-weight: 600;
+}
