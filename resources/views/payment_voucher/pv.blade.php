@@ -45,7 +45,8 @@
                     <a class="action-link link-edit mx-2" 
                     data-bs-toggle="modal"
                         data-bs-target="#pvModal"
-                        data-voucher='@json($voucher)'>
+                        {{-- data-voucher='@json($voucher)'> --}}
+                        data-pv="{{ $voucher->toJson() }}">
                         <i class="bi bi-pencil-square"></i>Edit
                     </a>
 

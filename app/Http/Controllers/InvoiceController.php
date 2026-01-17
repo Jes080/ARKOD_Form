@@ -126,7 +126,6 @@ class InvoiceController extends Controller
             'phone'          => $request->phone,
 
             'payment_terms'  => $request->payment_terms, // nullable
-            // 'due_date'       => $request->due_date->format('d-m-y'),      // nullable
             'due_date'       => $dueDate ? $dueDate->format('Y-m-d') : null,      // nullable
 
             'subtotal'       => $subtotal,
@@ -145,10 +144,6 @@ class InvoiceController extends Controller
                 $unitPrice = ($item['unit_price'] != 0 && !empty($item['unit_price'])) ? $item['unit_price'] : null;
 
                 $invoice->items()->create([
-                    // 'quantity'    => $item['quantity'],
-                    // 'description' => $item['description'],
-                    // 'unit_price'  => $item['unit_price'],
-                    // 'total_price' => $item['quantity'] * $item['unit_price'],
                     'quantity'    => $qty,
                     'description' => $item['description'] ?? '', 
                     'unit_price'  => $unitPrice,

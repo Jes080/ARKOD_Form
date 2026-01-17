@@ -46,7 +46,8 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Name</label>
-                        <input name="shipper[name]" class="form-control" required>
+                        <input name="shipper[name]" id="customer_search" class="form-control" autocomplete="off">
+                        <div id="customer_results" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Attention</label>

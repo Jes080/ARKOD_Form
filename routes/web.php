@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +15,11 @@ use App\Models\Invoice;
 use App\Models\Waybill;
 
 Route::get('/', [DashboardController::class, 'index']);
+
+// Customer Routes
+Route::get('/customer', [CustomerController::class, 'index']);
+Route::get('/customers/search', [CustomerController::class, 'search']);
+
 
 // Invoice Routes
 Route::get('/invoice', [InvoiceController::class, 'index']);
@@ -36,6 +42,8 @@ Route::delete('/waybill/{id}', [WaybillController::class, 'destroy']);
 Route::get('/payment-voucher', [PaymentVoucherController::class, 'index']);
 Route::post('/payment-voucher/store', [PaymentVoucherController::class, 'store']);
 Route::get('/payment-voucher/{id}/print', [PaymentVoucherController::class, 'print']);
+Route::get('/payment-voucher/{id}/edit', [PaymentVoucherController::class, 'edit']);
+Route::put('/payment-voucher/{id}/update', [PaymentVoucherController::class, 'update']);
 Route::delete('/payment-voucher/{id}', [PaymentVoucherController::class, 'destroy']);
 
 /* placeholders */

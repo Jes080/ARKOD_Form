@@ -65,12 +65,21 @@
 
                 <div class="row mb-3">
                     {{-- <div class="col-md-8"><label class="form-label">Prepared By</label><input name="prepared_by" id="prepared_by" class="form-control"></div> --}}
-                        <label class="form-label">Prepared By</label>
+                        {{-- <label class="form-label">Prepared By</label>
                         <select name="prepared_by" id="prepared_by" class="form-select">
-                            <option>Jesdylisia</option>
-                            <option>Yu Shan</option>
+                            <option>JESDYLISIA</option>
+                            <option>YU SHAN</option>
                             <option> </option>
-                        </select>
+                        </select> --}}
+                        <div class="col-md-4">
+                            <label class="form-label">Prepared By</label>
+                            <input name="prepared_by" id="prepared_by" class="form-control" list="preparedByOptions">
+                            
+                            <datalist id="preparedByOptions">
+                                <option value="JESDYLISIA">
+                                <option value="YU SHAN">
+                            </datalist>
+                        </div>
                     <div class="col-md-4"><label class="form-label">Approved By</label><input name="approved_by" id="approved_by" class="form-control"></div>
                     <div class="col-md-4"><label class="form-label">Received By</label><input name="received_by" id="received_by" class="form-control"></div>
                 </div>
@@ -110,7 +119,7 @@
         </form>
     </div>
 </div>
-<script>
+{{-- <script>
 let rowCount = 0;
 const modal = document.getElementById('pvModal');
 
@@ -233,6 +242,174 @@ function calculateTotal() {
     }
 }
 
+// Helper function to convert number to Ringgit Words
+function amountToWords(amount) {
+    if (amount === 0) return "ZERO";
+    
+    const words = ["", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN", "NINETEEN"];
+    const tens = ["", "", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY"];
+    const scales = ["", "THOUSAND", "MILLION"];
+
+    function convert(n) {
+        if (n < 20) return words[n];
+        if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + words[n % 10] : "");
+        if (n < 1000) return words[Math.floor(n / 100)] + " HUNDRED" + (n % 100 !== 0 ? " AND " + convert(n % 100) : "");
+        return "";
+    }
+
+    let str = "";
+    let parts = amount.toFixed(2).split(".");
+    let ringgit = parseInt(parts[0]);
+    let sen = parseInt(parts[1]);
+
+    if (ringgit > 0) {
+        let i = 0;
+        while (ringgit > 0) {
+            if (ringgit % 1000 !== 0) {
+                str = convert(ringgit % 1000) + (scales[i] ? " " + scales[i] : "") + (str ? " " + str : "");
+            }
+            ringgit = Math.floor(ringgit / 1000);
+            i++;
+        }
+        str += " RINGGIT";
+    }
+
+    if (sen > 0) {
+        str += (str ? " AND " : "") + convert(sen) + " SEN";
+    }
+
+    return str;
+}
+</script> --}}
+<script>
+let rowCount = 0;
+const modal = document.getElementById('pvModal');
+
+modal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const form = document.getElementById('pvForm');
+    const methodInput = document.getElementById('formMethod');
+    const modalTitle = document.getElementById('modalTitle');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // 1. Reset Form and Clear Items Table
+    form.reset();
+    document.querySelector('#itemsTable tbody').innerHTML = '';
+    rowCount = 0;
+
+    // 2. Check if we are in Edit Mode (button has data-pv)
+    if (button && button.dataset.pv) {
+        const pv = JSON.parse(button.dataset.pv);
+
+        modalTitle.innerText = 'Edit Payment Voucher';
+        submitBtn.innerText = 'Update Payment Voucher';
+        form.action = `/payment-voucher/${pv.id}/update`;
+        methodInput.value = 'PUT';
+
+        const fill = (name, value) => {
+            const el = form.querySelector(`[name="${name}"]`);
+            if (el) el.value = value ?? '';
+        };
+
+        // Fill basic fields using the 'name' attribute
+        form.querySelector('[name="pv_date"]').value = pv.pv_date ? pv.pv_date.split('T')[0] : '';
+        form.querySelector('[name="no"]').value = pv.no;
+        form.querySelector('[name="pay_by"]').value = pv.pay_by;
+        form.querySelector('[name="account_no"]').value = pv.account_no ?? '';
+        form.querySelector('[name="ledger"]').value = pv.ledger ?? '';
+        form.querySelector('[name="pay_to"]').value = pv.pay_to ?? '';
+        form.querySelector('[name="ref_no"]').value = pv.ref_no ?? '';
+        form.querySelector('[name="prepared_by"]').value = pv.prepared_by ?? '';
+        form.querySelector('[name="approved_by"]').value = pv.approved_by ?? '';
+        form.querySelector('[name="received_by"]').value = pv.received_by ?? '';
+
+        // Fill Items
+        if (pv.items && pv.items.length > 0) {
+            pv.items.forEach(item => addItem(item));
+        } else {
+            addItem(); 
+        }
+    } else {
+        // --- CREATE MODE ---
+        modalTitle.innerText = 'Create Payment Voucher';
+        submitBtn.innerText = 'Save Payment Voucher';
+        form.action = '/payment-voucher/store';
+        methodInput.value = 'POST';
+
+        const today = new Date().toISOString().split('T')[0];
+        form.querySelector('[name="pv_date"]').value = today;
+
+        addItem(); // Add one blank row for new entry
+    }
+    
+    calculateTotal();
+});
+
+function addItem(data = null) {
+    const tbody = document.querySelector('#itemsTable tbody');
+    
+    // Values extracted from data object (for Edit Mode)
+    const detailNoValue = data ? (data.detail_no ?? '') : '';
+    const detailsValue = data ? (data.payment_details ?? '') : '';
+    const amountValue = (data && data.amount > 0) ? parseFloat(data.amount).toFixed(2) : '';
+
+    const html = `
+    <tr>
+        <td>
+            <input type="text" name="items[${rowCount}][detail_no]" 
+                   class="form-control form-control-sm text-center" 
+                   value="${detailNoValue}">
+        </td>
+        <td>
+            <input type="text" name="items[${rowCount}][payment_details]" 
+                   class="form-control form-control-sm" 
+                   value="${detailsValue}" required>
+        </td>
+        <td>
+            <input type="number" step="0.01" name="items[${rowCount}][amount]" 
+                   class="form-control form-control-sm text-end" 
+                   value="${amountValue}" 
+                   oninput="calculateTotal()">
+        </td>
+        <td>
+            <button type="button" class="btn btn-sm btn-danger" 
+                    onclick="this.closest('tr').remove(); calculateTotal();">×</button>
+        </td>
+    </tr>`;
+    
+    tbody.insertAdjacentHTML('beforeend', html);
+    rowCount++;
+}
+
+function calculateTotal() {
+    let total = 0;
+    
+    // Select all inputs where name contains [amount]
+    document.querySelectorAll('[name*="[amount]"]').forEach(el => {
+        total += parseFloat(el.value) || 0;
+    });
+    
+    // Update Display
+    document.getElementById('total_amount').innerText = total.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    
+    // Handle the Word Conversion
+    const wordDisplay = document.getElementById('total_amount_word');
+    const wordInput = document.getElementById('total_amount_word_input');
+    
+    if (total > 0) {
+        const resultWords = amountToWords(total) + " ONLY";
+        wordDisplay.innerText = resultWords;
+        wordInput.value = resultWords;
+    } else {
+        wordDisplay.innerText = "";
+        wordInput.value = "";
+    }
+}
+
+// Keep your existing amountToWords function below...
 // Helper function to convert number to Ringgit Words
 function amountToWords(amount) {
     if (amount === 0) return "ZERO";

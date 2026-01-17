@@ -67,6 +67,18 @@ class PaymentVoucherController extends Controller
         return redirect('/payment-voucher')->with('success', 'Payment Voucher created');
     }
 
+        public function edit($id)
+        {
+            $voucher = PaymentVoucher::with('items')->findOrFail($id);
+
+            return view('payment_voucher.pv-form', [
+                'voucher' => $voucher,
+                'items'   => $voucher->items,
+                'isEdit'  => true
+            ]);
+        }
+
+
     public function update(Request $request, $id)
     {
         $voucher = PaymentVoucher::with('items')->findOrFail($id);
@@ -79,6 +91,7 @@ class PaymentVoucherController extends Controller
         $voucher->update([
             'no' => $request->no,
             'pv_date' => $date->format('Y-m-d'),
+            'pv_no' => 'PV' . $date->format('Ym') . '-' . $request->no,
             'pay_by' => $request->pay_by,
             'account_no' => $request->account_no,
             'ledger' => $request->ledger,
