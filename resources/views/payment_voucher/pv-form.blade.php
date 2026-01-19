@@ -34,6 +34,7 @@
                         <label class="form-label">Account No</label>
                         <input name="account_no" id="account_no" class="form-control" value="PBBANK 3223583706">
                     </div>
+                    {{-- </div>
                     <div class="col-md-4">
                         <label class="form-label">Ledger</label>
                         <select name="ledger" id="ledger" class="form-select">
@@ -50,7 +51,25 @@
                             <option>MEMBERSHIP AND SUBSCRIPTION FEES</option>
                             <option>OUTSOURCE</option>
                         </select>
-                    </div>
+                    </div> --}}
+                    <div class="col-md-4">
+                    <label class="form-label">Ledger</label>
+                    <input name="ledger" id="ledger" class="form-control" style="max-width: 1000%" list="ledgerOptions" placeholder="Select or type ledger...">
+                    
+                    <datalist id="ledgerOptions">
+                        <option value="AMOUNT OWING TO DIRECTOR">
+                        <option value="TRANSPORTATION CHARGES">
+                        <option value="PALLETS EXPENSES">
+                        <option value="STORAGE EXPENSES">
+                        <option value="LEGAL AND PROFESSIONAL FEES">
+                        <option value="TELEPHONE CHARGES">
+                        <option value="INTERNET CHARGES">
+                        <option value="RENTAL EXPENSES">
+                        <option value="PRINTING AND STATIONERY">
+                        <option value="MEMBERSHIP AND SUBSCRIPTION FEES">
+                        <option value="OUTSOURCE">
+                    </datalist>
+                </div>
                     {{-- <div class="col-md-4">
                         <label class="form-label">Pay To</label>
                         <input type="text" name="pay_to" id="pay_to" class="form-control">
