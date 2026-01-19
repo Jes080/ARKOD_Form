@@ -69,15 +69,30 @@ class InvoiceController extends Controller
         ]);
 
         // Save items
-        foreach ($items as $item) {
-            if (
-                isset($item['quantity'], $item['description'], $item['unit_price'])
-            ) {
+        // foreach ($items as $item) {
+        //     if (
+        //         isset($item['quantity'], $item['description'], $item['unit_price'])
+        //     ) {
+        //         $invoice->items()->create([
+        //             'quantity'    => $item['quantity'],
+        //             'description' => $item['description'],
+        //             'unit_price'  => $item['unit_price'],
+        //             'total_price' => $item['quantity'] * $item['unit_price'],
+        //         ]);
+        //     }
+        // }
+          foreach ($items as $item) {
+            // if (isset($item['quantity'], $item['description'], $item['unit_price'])) {
+            if (!empty($item['description']) || (!empty($item['quantity']) && $item['quantity'] != 0) || (!empty($item['unit_price']) && $item['unit_price'] != 0)) {
+                $qty = ($item['quantity'] != 0 && !empty($item['quantity'])) ? $item['quantity'] : null;
+                $unitPrice = ($item['unit_price'] != 0 && !empty($item['unit_price'])) ? $item['unit_price'] : null;
+
                 $invoice->items()->create([
-                    'quantity'    => $item['quantity'],
-                    'description' => $item['description'],
-                    'unit_price'  => $item['unit_price'],
-                    'total_price' => $item['quantity'] * $item['unit_price'],
+                    'quantity'    => $qty,
+                    'description' => $item['description'] ?? '', 
+                    'unit_price'  => $unitPrice,
+                    // We still calculate total_price as 0 so your math doesn't break
+                    'total_price' => ($qty && $unitPrice) ? ($qty * $unitPrice) : 0,
                 ]);
             }
         }
