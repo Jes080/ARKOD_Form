@@ -31,7 +31,7 @@
                         data-bs-target="#customerModal"
                         data-customer='@json($c)'>Edit</button>
 
-                    <form action="/customers/{{ $c->id }}" method="POST" class="d-inline">
+                    <form action="/customer/{{ $c->id }}" method="POST" class="d-inline">
                         @csrf @method('DELETE')
                         <button class="btn btn-sm btn-danger"
                                 onclick="return confirm('Delete?')">×</button>

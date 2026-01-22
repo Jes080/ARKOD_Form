@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,12 +14,22 @@ use App\Http\Controllers\PaymentVoucherController;
 use App\Http\Controllers\WaybillController;
 use App\Models\Invoice;
 use App\Models\Waybill;
+use App\Models\Customer;
+
 
 Route::get('/', [DashboardController::class, 'index']);
 
 // Customer Routes
 Route::get('/customer', [CustomerController::class, 'index']);
-Route::get('/customers/search', [CustomerController::class, 'search']);
+// Route::get('/customers/search', [CustomerController::class, 'search']);
+Route::post('/customer/store', [CustomerController::class, 'store']);
+Route::get('/customer/{id}/edit', [CustomerController::class, 'edit']);
+Route::put('/customer/{id}/update', [CustomerController::class, 'update']);
+Route::delete('/customer/{id}', [CustomerController::class, 'destroy']);
+Route::get('/customers/search', function (Request $request) {
+    return Customer::where('name', 'LIKE', '%' . $request->q . '%')
+        ->get(['id','name','address','postcode','phone','email']);
+});
 
 
 // Invoice Routes

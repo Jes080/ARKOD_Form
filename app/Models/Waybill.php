@@ -37,6 +37,7 @@ class Waybill extends Model
     ];
     protected $casts = [
         'waybill_date' => 'date:Y-m-d',
+        'service_type' => 'array',
     ];
 }
 

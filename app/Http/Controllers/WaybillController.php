@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Waybill;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\PDF;
@@ -20,24 +22,48 @@ class WaybillController extends Controller
 
         return view('waybill.waybill', [
             'waybills' => $query->get(),
-            'waybill' => new Waybill()
+            'waybill'  => new Waybill()
         ]);
     }
 
+    // public function search(Request $request)
+    // {
+    //     $query = $request->get('q');
+    //
+    //     if (!$query || strlen($query) < 2) {
+    //         return response()->json([]);
+    //     }
+    //
+    //     return Customer::select(
+    //             'id',
+    //             'name',
+    //             'email',
+    //             'address',
+    //             'postcode',
+    //             'phone'
+    //         )
+    //         ->where('name', 'LIKE', "%{$query}%")
+    //         ->orderBy('name')
+    //         ->limit(10)
+    //         ->get();
+    // }
+
     public function store(Request $request)
     {
-        // $date = Carbon::parse($request->waybill_date)->format('ymd');
         $date = $request->date('waybill_date');
+
         if (!$date) {
             return back()->withErrors(['waybill_date' => 'The date field is required.']);
         }
+
         Waybill::create([
             'no' => $request->no,
             'waybill_date' => $date->format('Y-m-d'),
             'waybill_no' => 'ARKOD' . $date->format('ymd') . '-WB' . $request->no,
             'customer_id' => $request->customer_id,
-            'service_type' => $request->service_type,
-            
+
+            // ✅ MULTIPLE SERVICE TYPE (ARRAY → JSON AUTO VIA CAST)
+            'service_type' => $request->service_type ?? [],
 
             'shipper_name' => $request->shipper['name'],
             'shipper_attention' => $request->shipper['attention'] ?? null,
@@ -65,12 +91,16 @@ class WaybillController extends Controller
     public function print($id)
     {
         $waybill = Waybill::findOrFail($id);
+
         $data = [
             'customer_id'  => $waybill->customer_id,
             'waybill_no'   => $waybill->waybill_no,
             'waybill_date' => $waybill->waybill_date->format('d-m-Y'),
+
+            // ✅ ARRAY
             'service_type' => $waybill->service_type,
-            'shipper'      => [
+
+            'shipper' => [
                 'name'     => $waybill->shipper_name,
                 'address'  => $waybill->shipper_address,
                 'postcode' => $waybill->shipper_postcode,
@@ -78,7 +108,7 @@ class WaybillController extends Controller
                 'tel'      => $waybill->shipper_phone,
                 'email'    => $waybill->shipper_email,
             ],
-            'receiver'     => [
+            'receiver' => [
                 'name'     => $waybill->receiver_name,
                 'address'  => $waybill->receiver_address,
                 'postcode' => $waybill->receiver_postcode,
@@ -86,33 +116,21 @@ class WaybillController extends Controller
                 'tel'      => $waybill->receiver_phone,
                 'email'    => $waybill->receiver_email,
             ],
-            'order'        => [
-                'content'  => $waybill->content, 
+            'order' => [
+                'content'  => $waybill->content,
                 'category' => $waybill->category,
                 'size'     => $waybill->size,
                 'total_weight' => $waybill->total_weight,
             ],
         ];
 
-        // Generate PDF
         $pdf = PDF::loadView('waybill.waybill-print', $data);
-
         return $pdf->stream($waybill->waybill_no . '.pdf');
-        $filename = $waybill->waybill_no . '.pdf';
-        return new Response(
-            $pdf->output(),
-            200,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="' . $filename . '"'
-            ]
-        );
     }
 
     public function edit($id)
     {
-        $waybill = Waybill::findOrFail($id);
-        return response()->json($waybill);
+        return response()->json(Waybill::findOrFail($id));
     }
 
     public function update(Request $request, $id)
@@ -120,12 +138,12 @@ class WaybillController extends Controller
         $waybill = Waybill::findOrFail($id);
 
         $waybill->update([
-            'waybill_date'   => $request->date('waybill_date')->format('Y-m-d'),
-            'customer_id' => $request->customer_id,
-            'waybill_no' => 'ARKOD' . (\Carbon\Carbon::parse($request->date('waybill_date'))->format('ymd')) . '-WB' . $request->no,
-            'service_type' => $request->service_type,
-            // 'waybill_date' => $request->waybill_date,
-            // 'waybill_date' => Carbon::parse($request->waybill_date)->format('Y-m-d'),
+            'waybill_date' => $request->date('waybill_date')->format('Y-m-d'),
+            'customer_id'  => $request->customer_id,
+            'waybill_no'   => 'ARKOD' . Carbon::parse($request->date('waybill_date'))->format('ymd') . '-WB' . $request->no,
+
+            // ✅ MULTIPLE SERVICE TYPE
+            'service_type' => $request->service_type ?? [],
 
             'shipper_name' => $request->shipper['name'],
             'shipper_attention' => $request->shipper['attention'] ?? null,
@@ -156,4 +174,3 @@ class WaybillController extends Controller
         return redirect('/waybill')->with('success', 'Waybill deleted successfully');
     }
 }
-?>

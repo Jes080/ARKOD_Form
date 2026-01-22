@@ -129,7 +129,15 @@
                         </tr>
                         <tr>
                             <td>Service Type:</td>
-                            <td>{{ $service_type }}</td>
+<td style="line-height: 1.2;">
+    @if(is_array($service_type))
+        @foreach(array_chunk($service_type, 2) as $chunk)
+            {{ implode(', ', $chunk) }}<br>
+        @endforeach
+    @else
+        {{ $service_type }}
+    @endif
+</td>
                         </tr>
                     </tbody>
                 </table>

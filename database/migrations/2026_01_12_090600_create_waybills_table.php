@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string('no');
             $table->string('waybill_no');
             $table->string('customer_id');
-            $table->string('service_type');
+            $table->json('service_type');
             $table->date('waybill_date');
 
             // Shipper
