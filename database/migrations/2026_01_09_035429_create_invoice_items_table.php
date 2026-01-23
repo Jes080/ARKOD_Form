@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->nullable();
+            $table->foreignId('invoice_id')->constrained()->onDelete('cascade');            $table->decimal('quantity', 10, 2)->nullable(); // 10 digits total, 2 after decimal
             $table->string('description');
             $table->decimal('unit_price', 10, 2)->nullable();
             $table->decimal('total_price', 10, 2)->nullable();

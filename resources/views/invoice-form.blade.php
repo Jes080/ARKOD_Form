@@ -267,7 +267,7 @@ function addItem(data = null) {
     const totalValue = (data && data.total_price > 0) ? parseFloat(data.total_price).toFixed(2) : '';
     const html = `
     <tr>
-        <td><input type="number" name="items[${rowCount}][quantity]" class="form-control form-control-sm" value="${data ? data.quantity : ''}" oninput="calculateRow(this)"></td>
+        <td><input type="number" step="any" name="items[${rowCount}][quantity]" class="form-control form-control-sm" value="${data ? data.quantity : ''}" oninput="calculateRow(this)"></td>
         <td><input type="text" name="items[${rowCount}][description]" class="form-control form-control-sm" value="${data ? data.description : ''}"></td>
         <td><input type="number" step="0.01" name="items[${rowCount}][unit_price]" class="form-control form-control-sm" value="${data ? data.unit_price : ''}" oninput="calculateRow(this)"></td>
         <td><input type="text" name="items[${rowCount}][total_price]" class="form-control form-control-sm" value="${(data && parseFloat(data.total_price) > 0) ? parseFloat(data.total_price).toFixed(2) : ''}" readonly></td>
