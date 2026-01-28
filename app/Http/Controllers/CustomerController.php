@@ -14,9 +14,13 @@
 
         public function search(Request $request)
         {
-            $q = $request->get('q');
+            $q = $request->get('query');
 
-            return Customer::where('name', 'LIKE', "%{$q}%")
+            if (!$q || strlen($q) < 2) {
+                return response()->json([]);
+            }
+
+            return Customer::where('name', 'LIKE', "{$q}%")
                 ->orderBy('name')
                 ->limit(10)
                 ->get([
@@ -24,6 +28,7 @@
                     'name',
                     'address',
                     'postcode',
+                    'attention',
                     'phone',
                     'email'
                 ]);
@@ -35,9 +40,10 @@
             // Match these keys exactly to the 'name' attributes in your HTML
             $validatedData = $request->validate([
                 'name'     => 'required|string|max:255',
-                'email'    => 'nullable|email',
                 'address'  => 'nullable|string',
                 'postcode' => 'nullable|string',
+                'attention' => 'nullable|string',
+                'email'    => 'nullable|email',
                 'phone'    => 'nullable|string' // Changed from 'tel' to 'phone'
             ]);
 
@@ -51,11 +57,12 @@
             $customer = Customer::findOrFail($id);
 
             $validatedData = $request->validate([
-                'name'     => 'required|string|max:255',
-                'email'    => 'nullable|email',
-                'address'  => 'nullable|string',
-                'postcode' => 'nullable|string',
-                'phone'    => 'nullable|string' // Changed from 'tel' to 'phone'
+                'name' => 'required|string|max:255',
+                'address' => 'nullable',
+                'postcode' => 'nullable',
+                'attention' => 'nullable',
+                'phone' => 'nullable',
+                'email' => 'nullable|email',
             ]);
 
             $customer->update($validatedData);

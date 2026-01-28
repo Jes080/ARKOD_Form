@@ -12,8 +12,9 @@
             <div class="modal-body">
                 <div class="row g-3">
                     <div class="col-12 position-relative">
-                        <label class="form-label">Customer Name (Search)</label>
+                        <label class="form-label">Company Name</label>
                         <input class="form-control" name="name" id="customer_search" placeholder="Type to search or enter new name" required autocomplete="off">
+                        <input type="hidden" name="customer_id" id="customer_id">
                         <div id="customer_results" class="list-group position-absolute w-100" style="z-index: 1051; display: none; max-height: 200px; overflow-y: auto;"></div>
                     </div>
 
@@ -26,7 +27,10 @@
                         <label class="form-label">Postcode</label>
                         <input class="form-control" name="postcode" placeholder="Postcode">
                     </div>
-
+                    <div class="col-12">
+                        <label class="form-label">Attention</label>
+                        <input class="form-control" name="attention" placeholder="Attention">
+                    </div>
                     <div class="col-md-8">
                         <label class="form-label">Phone</label>
                         <input class="form-control" name="phone" placeholder="Phone Number">
@@ -71,6 +75,7 @@
             form.querySelector('[name="name"]').value = data.name;
             form.querySelector('[name="address"]').value = data.address ?? '';
             form.querySelector('[name="postcode"]').value = data.postcode ?? '';
+            form.querySelector('[name="attention"]').value = data.attention ?? '';
             form.querySelector('[name="phone"]').value = data.phone ?? ''; 
             form.querySelector('[name="email"]').value = data.email ?? '';
         } else {
@@ -81,62 +86,5 @@
         }
     });
 
-    // --- 2. SEARCH / AUTOCOMPLETE LOGIC ---
-$('#customer_search').on('keyup', function() {
-    let query = $(this).val();
-    let dropdown = $('#customer_results');
-
-    if (query.length >= 2) {
-        $.ajax({
-            url: "{{ route('customer.search') }}",
-            method: 'GET',
-            data: { query: query },
-            dataType: 'json', // Tell jQuery to expect JSON
-            success: function(data) {
-                dropdown.empty();
-                if(data.length > 0) {
-                    // Loop through the JSON data and build the HTML manually
-                    $.each(data, function(index, customer) {
-                        let details = JSON.stringify(customer);
-                        dropdown.append(`
-                            <a href="#" class="list-group-item list-group-item-action dropdown-item" 
-                               data-details='${details}'>
-                               ${customer.name}
-                            </a>
-                        `);
-                    });
-                    dropdown.show();
-                } else {
-                    dropdown.hide();
-                }
-            }
-        });
-    } else {
-        dropdown.hide().html('');
-    }
-});
-
-    // Handle selection from search dropdown
-    $(document).on('click', '#customer_results .dropdown-item', function(e) {
-        e.preventDefault();
-        // Assume the controller passes data-details attribute in JSON format
-        let details = JSON.parse($(this).attr('data-details'));
-        
-        const form = document.getElementById('customerForm');
-        form.querySelector('[name="name"]').value = details.name;
-        form.querySelector('[name="address"]').value = details.address ?? '';
-        form.querySelector('[name="postcode"]').value = details.postcode ?? '';
-        form.querySelector('[name="phone"]').value = details.phone ?? details.tel ?? '';
-        form.querySelector('[name="email"]').value = details.email ?? '';
-
-        $('#customer_results').hide().html('');
-    });
-
-    // Close dropdown when clicking outside
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('#customer_search, #customer_results').length) {
-            $('#customer_results').hide();
-        }
-    });
 });
 </script>

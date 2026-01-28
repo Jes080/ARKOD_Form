@@ -24,12 +24,13 @@ Route::get('/customer', [CustomerController::class, 'index']);
 // Route::get('/customers/search', [CustomerController::class, 'search']);
 Route::post('/customer/store', [CustomerController::class, 'store']);
 Route::get('/customer/{id}/edit', [CustomerController::class, 'edit']);
-Route::put('/customer/{id}/update', [CustomerController::class, 'update']);
+Route::put('/customer/{id}/update', [CustomerController::class, 'update'])->name('customer.update');
 Route::delete('/customer/{id}', [CustomerController::class, 'destroy']);
-Route::get('/customers/search', function (Request $request) {
-    return Customer::where('name', 'LIKE', '%' . $request->q . '%')
-        ->get(['id','name','address','postcode','phone','email']);
-});
+// Route::get('/customers/search', function (Request $request) {
+//     return Customer::where('name', 'LIKE', '%' . $request->q . '%')
+//         ->get(['id','name','address','postcode','phone','email']);
+// });
+Route::get('/customers/search', [CustomerController::class, 'search'])->name('customer.search');
 
 
 // Invoice Routes

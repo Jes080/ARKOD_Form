@@ -26,28 +26,6 @@ class WaybillController extends Controller
         ]);
     }
 
-    // public function search(Request $request)
-    // {
-    //     $query = $request->get('q');
-    //
-    //     if (!$query || strlen($query) < 2) {
-    //         return response()->json([]);
-    //     }
-    //
-    //     return Customer::select(
-    //             'id',
-    //             'name',
-    //             'email',
-    //             'address',
-    //             'postcode',
-    //             'phone'
-    //         )
-    //         ->where('name', 'LIKE', "%{$query}%")
-    //         ->orderBy('name')
-    //         ->limit(10)
-    //         ->get();
-    // }
-
     public function store(Request $request)
     {
         $date = $request->date('waybill_date');

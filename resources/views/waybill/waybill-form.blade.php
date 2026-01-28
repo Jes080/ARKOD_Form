@@ -21,30 +21,19 @@
                         <label class="form-label">Customer ID</label>
                         <input name="customer_id" class="form-control" required>
                     </div>
-                    {{-- <div class="col-md-3">
-                        <label class="form-label">Service Type</label>
-                        <select name="service_type" class="form-select">
-                            <option>Door to Door</option>
-                            <option>Pick Up</option>
-                            <option>Sea Freight</option>
-                            <option>Air Freight</option>
-                            <option>Land Transport</option>
-                            <option>Domestic Pick Up</option>
-                        </select>
-                    </div> --}}
                     <div class="col-md-3">
-    <label class="form-label">Service Type</label>
+                    <label class="form-label">Service Type</label>
 
-    <div class="form-check">
-        <input class="form-check-input"
-               type="checkbox"
-               name="service_type[]"
-               value="Door to Door"
-               id="service_door">
-        <label class="form-check-label" for="service_door">
-            Door to Door
-        </label>
-    </div>
+                    <div class="form-check">
+                        <input class="form-check-input"
+                            type="checkbox"
+                            name="service_type[]"
+                            value="Door to Door"
+                            id="service_door">
+                        <label class="form-check-label" for="service_door">
+                            Door to Door
+                        </label>
+                    </div>
 
     <div class="form-check">
         <input class="form-check-input"
@@ -113,111 +102,95 @@
                 <!-- SHIPPER -->
                 <h6 class="fw-bold mb-3">Shipper Details</h6>
 
-                <div class="row mb-3">
+                <div class="row mb-3 position-relative">
                     <div class="col-md-6">
                         <label class="form-label">Name</label>
-                        <input name="shipper[name]" id="customer_search" class="form-control" autocomplete="off">
-                        <div id="customer_results" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
-                    </div>
-                    {{-- <div class="position-relative">
-                        <input type="hidden" name="shipper_customer_id" id="shipper_customer_id">
-
                         <input name="shipper[name]"
                             id="shipper_name"
                             class="form-control"
                             autocomplete="off">
 
+                        <input type="hidden" id="shipper_customer_id">
+
                         <div id="shipper_dropdown"
                             class="list-group position-absolute w-100 d-none"
                             style="z-index:1000;"></div>
-                    </div> --}}
-
-                    <div class="col-md-6">
-                        <label class="form-label">Attention</label>
-                        <input name="shipper[attention]" class="form-control">
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-8">
                         <label class="form-label">Address</label>
-                        <input name="shipper[address]" class="form-control" required>
+                        <input name="shipper[address]" id="shipper_address" class="form-control">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label">Postcode</label>
-                        <input name="shipper[postcode]" class="form-control" required>
+                        <input name="shipper[postcode]" id="shipper_postcode" class="form-control">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label">Phone</label>
-                        <input name="shipper[tel]" class="form-control" required>
+                        <input name="shipper[tel]" id="shipper_phone" class="form-control">
                     </div>
                 </div>
-
+                <div class="col-md-6">
+                    <label class="form-label">Attention</label>
+                    <input name="shipper[attention]" id="shipper_attention" class="form-control">
+                </div>
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <label class="form-label">Email</label>
-                        <input name="shipper[email]" class="form-control">
+                        <input name="shipper[email]" id="shipper_email" class="form-control">
                     </div>
                 </div>
-                {{-- <input name="shipper[address]" id="shipper_address" class="form-control" required>
-                <input name="shipper[postcode]" id="shipper_postcode" class="form-control" required>
-                <input name="shipper[tel]" id="shipper_phone" class="form-control" required>
-                <input name="shipper[email]" id="shipper_email" class="form-control"> --}}
 
                 <hr>
 
                 <!-- RECEIVER -->
                 <h6 class="fw-bold mb-3">Receiver Details</h6>
 
-                <div class="row mb-3">
+                <div class="row mb-3 position-relative">
                     <div class="col-md-6">
                         <label class="form-label">Name</label>
-                        <input name="receiver[name]" class="form-control" required>
-                    </div>
-                    {{-- <div class="position-relative">
-                        <input type="hidden" name="receiver_customer_id" id="receiver_customer_id">
-
                         <input name="receiver[name]"
                             id="receiver_name"
                             class="form-control"
                             autocomplete="off">
 
+                        <input type="hidden" id="receiver_customer_id">
+
                         <div id="receiver_dropdown"
                             class="list-group position-absolute w-100 d-none"
                             style="z-index:1000;"></div>
-                    </div> --}}
-
-                    <div class="col-md-6">
-                        <label class="form-label">Attention</label>
-                        <input name="receiver[attention]" class="form-control">
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-8">
                         <label class="form-label">Address</label>
-                        <input name="receiver[address]" class="form-control" required>
+                        <input name="receiver[address]" id="receiver_address" class="form-control">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label">Postcode</label>
-                        <input name="receiver[postcode]" class="form-control" required>
+                        <input name="receiver[postcode]" id="receiver_postcode" class="form-control">
                     </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Attention</label>
+                        <input name="receiver[attention]" id="receiver_attention" class="form-control">
+                    </div>
+                    
                     <div class="col-md-2">
                         <label class="form-label">Phone</label>
-                        <input name="receiver[tel]" class="form-control" required>
+                        <input name="receiver[tel]" id="receiver_phone" class="form-control">
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <label class="form-label">Email</label>
-                        <input name="receiver[email]" class="form-control">
+                        <input name="receiver[email]" id="receiver_email" class="form-control">
                     </div>
                 </div>
-                {{-- <input name="receiver[address]" id="receiver_address" class="form-control" required>
-                <input name="receiver[postcode]" id="receiver_postcode" class="form-control" required>
-                <input name="receiver[tel]" id="receiver_phone" class="form-control" required>
-                <input name="receiver[email]" id="receiver_email" class="form-control"> --}}
 
                 <hr>
 
@@ -333,90 +306,88 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const input    = document.getElementById(config.input);
         const dropdown = document.getElementById(config.dropdown);
-        const hidden   = document.getElementById(config.hidden);
+
+        if (!input || !dropdown) return;
 
         input.addEventListener('input', function () {
 
-            const q = this.value.trim();
+            const query = this.value.trim();
 
-            if (q.length < 2) {
+            if (query.length < 2) {
                 dropdown.classList.add('d-none');
                 dropdown.innerHTML = '';
                 return;
             }
 
-            fetch(`/customers/search?q=${encodeURIComponent(q)}`)
+            fetch("{{ route('customer.search') }}?query=" + encodeURIComponent(query))
                 .then(res => res.json())
-                .then(customers => {
+                .then(data => {
 
                     dropdown.innerHTML = '';
 
-                    if (!customers.length) {
+                    if (!data.length) {
                         dropdown.classList.add('d-none');
                         return;
                     }
 
-                    customers.forEach(c => {
+                    data.forEach(customer => {
 
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.className = 'list-group-item list-group-item-action text-start';
+                        const item = document.createElement('div');
+                        item.className = 'list-group-item list-group-item-action';
+                        item.style.cursor = 'pointer';
+                        item.textContent = customer.name;
 
-                        btn.innerHTML = `
-                            <strong>${c.name}</strong><br>
-                            <small>${c.phone ?? ''} ${c.email ?? ''}</small>
-                        `;
+                        item.addEventListener('mousedown', function () {
+                            // IMPORTANT: mousedown fires BEFORE blur/click
+                            input.value = customer.name;
 
-                        btn.addEventListener('click', function () {
+                            config.fields.address.value   = customer.address ?? '';
+                            config.fields.postcode.value  = customer.postcode ?? '';
+                            config.fields.phone.value     = customer.phone ?? '';
+                            config.fields.attention.value = customer.attention ?? '';
+                            config.fields.email.value     = customer.email ?? '';
 
-                            input.value  = c.name ?? '';
-                            hidden.value = c.id ?? '';
-
-                            config.fields.address.value  = c.address  ?? '';
-                            config.fields.postcode.value = c.postcode ?? '';
-                            config.fields.phone.value    = c.phone    ?? '';
-                            config.fields.email.value    = c.email    ?? '';
-
-                            dropdown.classList.add('d-none');
                             dropdown.innerHTML = '';
+                            dropdown.classList.add('d-none');
                         });
 
-                        dropdown.appendChild(btn);
+                        dropdown.appendChild(item);
                     });
 
                     dropdown.classList.remove('d-none');
                 });
         });
 
-        document.addEventListener('click', function (e) {
-            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+        // Hide dropdown when input loses focus (with delay)
+        input.addEventListener('blur', function () {
+            setTimeout(() => {
                 dropdown.classList.add('d-none');
-            }
+            }, 150);
         });
     }
 
-    // ✅ SHIPPER AUTOCOMPLETE
+    // SHIPPER
     customerAutocomplete({
         input: 'shipper_name',
         dropdown: 'shipper_dropdown',
-        hidden: 'shipper_customer_id',
         fields: {
             address: document.getElementById('shipper_address'),
             postcode: document.getElementById('shipper_postcode'),
             phone: document.getElementById('shipper_phone'),
+            attention: document.getElementById('shipper_attention'),
             email: document.getElementById('shipper_email')
         }
     });
 
-    // ✅ RECEIVER AUTOCOMPLETE
+    // RECEIVER
     customerAutocomplete({
         input: 'receiver_name',
         dropdown: 'receiver_dropdown',
-        hidden: 'receiver_customer_id',
         fields: {
             address: document.getElementById('receiver_address'),
             postcode: document.getElementById('receiver_postcode'),
             phone: document.getElementById('receiver_phone'),
+            attention: document.getElementById('receiver_attention'),
             email: document.getElementById('receiver_email')
         }
     });
